@@ -1,4 +1,7 @@
 # backend/app/main.py
+# backend/app/main.py  — add these 2 lines at the very top
+from dotenv import load_dotenv
+load_dotenv()
 import io
 from fastapi import FastAPI, UploadFile, File, Depends, HTTPException
 from sqlalchemy.orm import Session
