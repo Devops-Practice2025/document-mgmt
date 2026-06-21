@@ -1,8 +1,11 @@
 # backend/app/s3_client.py
 import boto3
 import os
+from dotenv import load_dotenv
 
-AWS_REGION = os.getenv("AWS_REGION", "eu-central-1")
+load_dotenv()  # loads .env file safely, handles special characters
+
+AWS_REGION = os.getenv("AWS_REGION", "us-east-1")
 AWS_S3_BUCKET = os.getenv("AWS_S3_BUCKET")
 
 session = boto3.session.Session(
