@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: bankdocs
+      MYSQL_USER: bankdocs
+      MYSQL_PASSWORD: bankdocs
+    ports:
+      - "3306:3306"
+    volumes:
+      - bankdocs_mysql:/var/lib/mysql
+
+volumes:
+  bankdocs_mysql:
