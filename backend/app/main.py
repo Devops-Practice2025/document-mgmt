@@ -15,6 +15,16 @@ from .database import Base, engine
 from .s3_client import upload_fileobj, generate_presigned_url, delete_object
 
 app = FastAPI(title="BankDocs Backend")
+# Add after: app = FastAPI(title="BankDocs Backend")
+
+from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # React dev server
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.on_event("startup")
 def on_startup():
