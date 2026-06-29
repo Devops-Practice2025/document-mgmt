@@ -33,7 +33,7 @@ services:
 
   frontend:
     build:
-      context: ../frontend
+      context: ../frontend/bankdocs-ui
       dockerfile: Dockerfile
     ports:
       - "80:80"
