@@ -4,7 +4,7 @@ import axios from "axios";
 
 // This is where your FastAPI backend is running locally
 // In Phase 2, this will change to your EKS load balancer URL
-const BASE_URL = "http://localhost:8000";
+const BASE_URL = "http://localhost:8080";
 
 // Upload a document
 // Sends: customer_id, document_type, and the file itself
