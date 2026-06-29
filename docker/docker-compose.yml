@@ -10,7 +10,31 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - bankdocs_mysql:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      DB_HOST: db
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backends
+
 
 volumes:
-  bankdocs_mysql:
+  mysql_data:
