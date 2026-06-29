@@ -21,7 +21,11 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # React dev server
+    allow_origins=[
+            "http://localhost",
+        "http://localhost:80",
+        "http://localhost:5173",
+        "http://localhost:8080"],  # React dev server
     allow_methods=["*"],
     allow_headers=["*"],
 )
