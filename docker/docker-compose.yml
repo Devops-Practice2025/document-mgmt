@@ -24,7 +24,12 @@ services:
     ports:
       - "8080:8080"
     env_file:
-      DB_HOST: db
+      - ../backend/.env 
+    depends_on:
+      db:
+        condition: service_healthy  # waits for MySQL to be ready
+    environment:
+      DB_HOST: db   
 
   frontend:
     build:
