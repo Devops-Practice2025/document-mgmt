@@ -1,4 +1,4 @@
-From python:3.11:slim
+From python:3.11-slim
 WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cahe-dir -r requirements.txt
