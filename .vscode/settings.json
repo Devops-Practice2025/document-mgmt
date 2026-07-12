@@ -1,0 +1,8 @@
+{
+    "terraform.languageServer.enable": true,
+    "terraform.languageServer.pathToBinary": "/usr/bin/terraform",
+    "terraform.languageServer.args": [
+        "serve"
+    ]
+    
+}
