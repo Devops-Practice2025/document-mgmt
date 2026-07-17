@@ -37,11 +37,11 @@ touch ecr.tf
 Before writing any Terraform, create the S3 bucket that stores Terraform's state file. This is best practice — state lives in AWS, not on your laptop.
 
 ```bash
-aws s3 mb s3://bankdocs-terraform-state-<yourname> --region us-east-1
+aws s3 mb s3://bankdocs-terraform-state-techkarthi --region us-east-1
 
 # Enable versioning (so you can roll back state if something breaks)
 aws s3api put-bucket-versioning \
-  --bucket bankdocs-terraform-state-<yourname> \
+  --bucket bankdocs-terraform-state-techkarthi \
   --versioning-configuration Status=Enabled
 ```
 
