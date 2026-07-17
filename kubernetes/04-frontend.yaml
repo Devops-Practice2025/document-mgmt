@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: bankdocs
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: frontend
+
+  template:
+    metadata:
+      labels:
+        app: frontend
+
+    spec:
+      nodeSelector:
+        workload: application
+
+      containers:
+        - name: frontend
+          image: 361769597147.dkr.ecr.us-east-1.amazonaws.com/bankdocs-dev-frontend:v1
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  namespace: bankdocs
+spec:
+  type: LoadBalancer
+
+  selector:
+    app: frontend
+
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP

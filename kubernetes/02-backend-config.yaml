@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: bankdocs
+data:
+  DB_HOST: bankdocs-dev-mysql.cb6kk4a842wn.us-east-1.rds.amazonaws.com
+  DB_PORT: "3306"
+  DB_NAME: bankdocs
+  AWS_REGION: us-east-1
+  AWS_S3_BUCKET: bankdocs-documents-techkarthi
