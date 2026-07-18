@@ -1,0 +1,25 @@
+name: Test AWS Login
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  aws-login:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Login to AWS using OIDC
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: arn:aws:iam::361769597147:role/bankdocs-github-actions
+          aws-region: us-east-1
+
+      - name: Show AWS identity
+        run: aws sts get-caller-identity
