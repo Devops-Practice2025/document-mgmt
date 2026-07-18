@@ -1,7 +1,7 @@
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "~> 21.0"
-  
+
   kubernetes_version = var.kubernetes_version
 
 
@@ -38,7 +38,7 @@ module "eks" {
 
   eks_managed_node_groups = {
     application = {
-      ami_type = "AL2023_x86_64_STANDARD"
+      ami_type           = "AL2023_x86_64_STANDARD"
       kubernetes_version = var.kubernetes_version
 
       instance_types = ["t3.medium"]

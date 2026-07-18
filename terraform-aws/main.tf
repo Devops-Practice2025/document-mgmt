@@ -7,7 +7,7 @@ terraform {
     aws = {
       source  = "hashicorp/aws"
       version = ">= 6.52.0, < 7.0.0"
-  }
+    }
   }
 
   # Store state in S3 instead of local file
