@@ -1,0 +1,101 @@
+name: Deploy BankDocs Application
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_REGION: us-east-1
+  AWS_ACCOUNT_ID: "361769597147"
+  EKS_CLUSTER: bankdocs-dev
+  BACKEND_REPOSITORY: bankdocs-dev-backend
+  FRONTEND_REPOSITORY: bankdocs-dev-frontend
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to AWS
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: arn:aws:iam::361769597147:role/bankdocs-github-actions
+          aws-region: us-east-1
+          audience: sts.amazonaws.com
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Generate image tag
+        id: image
+        run: echo "tag=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+      - name: Build and push backend
+        env:
+          IMAGE_TAG: ${{ steps.image.outputs.tag }}
+        run: |
+          BACKEND_IMAGE="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${BACKEND_REPOSITORY}:${IMAGE_TAG}"
+
+          docker build \
+            -t "${BACKEND_IMAGE}" \
+            backend
+
+          docker push "${BACKEND_IMAGE}"
+
+      - name: Build and push frontend
+        env:
+          IMAGE_TAG: ${{ steps.image.outputs.tag }}
+        run: |
+          FRONTEND_IMAGE="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${FRONTEND_REPOSITORY}:${IMAGE_TAG}"
+
+          docker build \
+            -t "${FRONTEND_IMAGE}" \
+            frontend/bankdocs-ui
+
+          docker push "${FRONTEND_IMAGE}"
+
+      - name: Configure kubectl
+        run: |
+          aws eks update-kubeconfig \
+            --region "${AWS_REGION}" \
+            --name "${EKS_CLUSTER}"
+
+      - name: Deploy backend image
+        env:
+          IMAGE_TAG: ${{ steps.image.outputs.tag }}
+        run: |
+          BACKEND_IMAGE="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${BACKEND_REPOSITORY}:${IMAGE_TAG}"
+
+          kubectl set image deployment/backend \
+            backend="${BACKEND_IMAGE}" \
+            --namespace bankdocs
+
+          kubectl rollout status deployment/backend \
+            --namespace bankdocs \
+            --timeout=5m
+
+      - name: Deploy frontend image
+        env:
+          IMAGE_TAG: ${{ steps.image.outputs.tag }}
+        run: |
+          FRONTEND_IMAGE="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${FRONTEND_REPOSITORY}:${IMAGE_TAG}"
+
+          kubectl set image deployment/frontend \
+            frontend="${FRONTEND_IMAGE}" \
+            --namespace bankdocs
+
+          kubectl rollout status deployment/frontend \
+            --namespace bankdocs \
+            --timeout=5m
+
+      - name: Show application resources
+        run: |
+          kubectl get deployments,pods,services \
+            --namespace bankdocs \
+            --output wide
