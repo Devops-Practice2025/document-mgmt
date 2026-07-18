@@ -11,6 +11,40 @@ module "eks" {
   endpoint_private_access = true
 
   enable_cluster_creator_admin_permissions = false
+  access_entries = {
+    cluster_creator = {
+      principal_arn = "arn:aws:iam::361769597147:user/open-environment-jkwq8-admin"
+
+      policy_associations = {
+        admin = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+
+          access_scope = {
+            type = "cluster"
+          }
+        }
+      }
+    }
+
+    github_actions = {
+      principal_arn = "arn:aws:iam::361769597147:role/bankdocs-github-actions"
+
+      policy_associations = {
+        admin = {
+          policy_arn = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+
+          access_scope = {
+            type = "cluster"
+          }
+        }
+      }
+    }
+  }
+
+  kms_key_administrators = [
+    "arn:aws:iam::361769597147:user/open-environment-jkwq8-admin",
+    "arn:aws:iam::361769597147:role/bankdocs-github-actions"
+  ]
 
   vpc_id     = module.vpc.vpc_id
   subnet_ids = module.vpc.private_subnets
