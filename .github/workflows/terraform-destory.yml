@@ -45,4 +45,8 @@ jobs:
       - name: Terraform plan
         working-directory: terraform-aws
         run: terraform plan -no-color
+      
+      - name: Terraform destroy
+        working-directory: terraform-aws
+        run: terraform destroy -auto-approve
         

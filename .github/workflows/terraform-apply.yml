@@ -1,0 +1,52 @@
+name: BankDocs Terraform Pipeline
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Login to AWS using OIDC
+        uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: arn:aws:iam::361769597147:role/bankdocs-github-actions
+          aws-region: us-east-1
+          audience: sts.amazonaws.com
+
+      - name: Show AWS identity
+        run: aws sts get-caller-identity
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.14.6"
+
+      - name: Terraform format check
+        working-directory: terraform-aws
+        run: terraform fmt -check -recursive
+
+      - name: Terraform initialize
+        working-directory: terraform-aws
+        run: terraform init
+
+      - name: Terraform validate
+        working-directory: terraform-aws
+        run: terraform validate
+
+      - name: Terraform plan
+        working-directory: terraform-aws
+        run: terraform plan -no-color
+      
+      - name: Terraform apply
+        working-directory: terraform-aws
+        run: terraform apply -auto-approve
+        
