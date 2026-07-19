@@ -36,5 +36,3 @@ echo
 echo "Frontend image:"
 echo "${FRONTEND_REPO}:${IMAGE_TAG}"
 ```
-
-

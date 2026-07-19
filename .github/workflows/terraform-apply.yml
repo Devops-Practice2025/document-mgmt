@@ -1,4 +1,4 @@
-name: BankDocs Terraform Pipeline apply
+name: BankDocs Terraform Pipeline
 
 on:
   workflow_dispatch:
