@@ -1,6 +1,9 @@
 **Backend and Frontend image**
 
 ```bash
+ aws s3 mb s3://bankdocs-terraform-state-techkarthi --region us-east-1
+ aws s3api put-bucket-versioning   --bucket bankdocs-terraform-state-techkarthi   --versioning-configuration Status=Enabled
+ 
 export AWS_REGION="us-east-1"
 export AWS_ACCOUNT_ID="$(aws sts get-caller-identity --query Account --output text)"
 
@@ -35,4 +38,5 @@ echo "${BACKEND_REPO}:${IMAGE_TAG}"
 echo
 echo "Frontend image:"
 echo "${FRONTEND_REPO}:${IMAGE_TAG}"
+ami-0220d79f3f480ecf5
 ```
