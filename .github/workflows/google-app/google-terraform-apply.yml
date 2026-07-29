@@ -1,0 +1,34 @@
+name: Terraform Deployment
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read # Lower permission needed since we aren't using OIDC tokens
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Log in using the static JSON key
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GOOGLE_KEY }}
+          create_credentials_file: true # Keeps compatibility with Terraform
+
+      # Terraform setup remains exactly the same
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.8.5
+
+      # Terraform implicitly reads GOOGLE_APPLICATION_CREDENTIALS set by the auth step above
+      - name: Terraform Init
+        run: terraform init -input=false
+
+      - name: Terraform plan
+        run: terraform plan -input=false

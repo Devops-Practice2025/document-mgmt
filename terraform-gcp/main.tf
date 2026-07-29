@@ -1,0 +1,11 @@
+resource "google_compute_network" "vpc_network" {
+  name                    = var.vpc_name
+  auto_create_subnetworks = false
+ 
+}
+
+variable "vpc_name" {
+  description = "The name of the VPC network."
+  type        = string
+  default     = "my-vpc-network"
+}

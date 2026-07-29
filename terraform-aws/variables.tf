@@ -14,3 +14,4 @@ variable "instance_type" {
 variable "rhel_ami" {
   default = "ami-0220d79f3f480ecf5" # RHEL 9, us-east-1 (verify current AMI ID before use)
 }
+
