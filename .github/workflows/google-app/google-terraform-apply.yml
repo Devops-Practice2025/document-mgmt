@@ -28,7 +28,10 @@ jobs:
 
       # Terraform implicitly reads GOOGLE_APPLICATION_CREDENTIALS set by the auth step above
       - name: Terraform Init
+        
+        working-directory: terraform-gcp
         run: terraform init -input=false
 
       - name: Terraform plan
+        working-directory: terraform-gcp
         run: terraform plan -input=false
