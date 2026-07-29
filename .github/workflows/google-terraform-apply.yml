@@ -35,3 +35,7 @@ jobs:
       - name: Terraform plan
         working-directory: terraform-gcp
         run: terraform plan -input=false
+
+      - name: Terraform apply
+        working-directory: terraform-gcp
+        run: terraform apply -auto-approve -input=false
