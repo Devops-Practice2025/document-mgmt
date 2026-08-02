@@ -3,5 +3,6 @@ __pycache__/
 *.pyc
 .env
 frontend/node_modules
-eks-terraform/.terraform*
-terraform-aws/.terraform*
+infra/eks-terraform/.terraform*
+infra/terraform-aws/.terraform*
+infra/terraform-gcp/.terraform*
